@@ -63,7 +63,7 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
 
 @app.put("/product/{id}", status_code=status.HTTP_200_OK)
 def update_product_by_id(
-    id: int, request: schemas.Product, db: Session = Depends(get_db)
+        id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):
     product = db.query(models.Product).filter(models.Product.id == id)
     if not product.first():
@@ -74,3 +74,8 @@ def update_product_by_id(
         product.update(request.dict())
         db.commit()
         return f"Product successfully updated!"
+
+
+@app.post('/seller')
+def create_seller(request: schemas.Seller):
+    return request
