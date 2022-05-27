@@ -16,7 +16,7 @@ def get_db():
         db.close()
 
 
-@app.post("/product")
+@app.post("/product",status_code=201)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description, price=request.price
@@ -28,19 +28,19 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
     return request
 
 
-@app.get("/products", response_model=List[schemas.DisplayProduct])
+@app.get("/products", response_model=List[schemas.DisplayProduct],status_code=200)
 def get_all_product(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
 
 
-@app.get("/products/{id}", response_model=schemas.DisplayProduct)
+@app.get("/products/{id}", response_model=schemas.DisplayProduct,status_code=200)
 def get_product_by_id(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     return product
 
 
-@app.delete("/products/{id}")
+@app.delete("/products/{id}",status_code=204)
 def get_product_to_delete(id, db: Session = Depends(get_db)):
     db.query(models.Product).filter(models.Product.id == id).delete(
         synchronize_session=False
@@ -49,7 +49,7 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
     return f"product entry remove from db as requested!"
 
 
-@app.put("/product/{id}")
+@app.put("/product/{id}",status_code=200)
 def update_product_by_id(
     id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):
