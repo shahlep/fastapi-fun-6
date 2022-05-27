@@ -25,3 +25,9 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
     db.refresh(new_product)
 
     return request
+
+
+@app.get('/products')
+def get_all_product(db: Session = Depends(get_db)):
+    products = db.query(models.Product).all()
+    return products
