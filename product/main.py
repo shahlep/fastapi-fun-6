@@ -25,7 +25,7 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_product)
 
-    return request
+    return new_product
 
 
 @app.get(
@@ -77,5 +77,11 @@ def update_product_by_id(
 
 
 @app.post('/seller')
-def create_seller(request: schemas.Seller):
-    return request
+def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
+    new_seller = models.Seller(username=request.username,
+                               email=request.email, password=request.password)
+    db.add(new_seller)
+    db.commit()
+    db.refresh(new_seller)
+
+    return new_seller
