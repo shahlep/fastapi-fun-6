@@ -37,3 +37,11 @@ def get_all_product(db: Session = Depends(get_db)):
 def get_all_product(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     return product
+
+
+@app.delete('/products/{id}')
+def get_all_product(id, db: Session = Depends(get_db)):
+    db.query(models.Product).filter(models.Product.id == id).delete(
+        synchronize_session=False)
+    db.commit()
+    return f'product entry remove from db as requested!'
