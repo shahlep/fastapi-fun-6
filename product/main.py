@@ -16,7 +16,7 @@ def get_db():
         db.close()
 
 
-@app.post("/product",status_code=status.HTTP_201_CREATED)
+@app.post("/product", status_code=status.HTTP_201_CREATED)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description, price=request.price
@@ -28,24 +28,31 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
     return request
 
 
-@app.get("/products", response_model=List[schemas.DisplayProduct],
-         status_code=status.HTTP_200_OK)
+@app.get(
+    "/products",
+    response_model=List[schemas.DisplayProduct],
+    status_code=status.HTTP_200_OK,
+)
 def get_all_product(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
 
 
-@app.get("/products/{id}", response_model=schemas.DisplayProduct,
-         status_code=status.HTTP_200_OK)
+@app.get(
+    "/products/{id}",
+    response_model=schemas.DisplayProduct,
+    status_code=status.HTTP_200_OK,
+)
 def get_product_by_id(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     if not product:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Product not found!")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found!"
+        )
     return product
 
 
-@app.delete("/products/{id}",
-            status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/products/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def get_product_to_delete(id, db: Session = Depends(get_db)):
     db.query(models.Product).filter(models.Product.id == id).delete(
         synchronize_session=False
@@ -54,13 +61,15 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
     return f"product entry remove from db as requested!"
 
 
-@app.put("/product/{id}",status_code=status.HTTP_200_OK)
+@app.put("/product/{id}", status_code=status.HTTP_200_OK)
 def update_product_by_id(
     id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):
     product = db.query(models.Product).filter(models.Product.id == id)
     if not product.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Product not found!")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found!"
+        )
     else:
         product.update(request.dict())
         db.commit()
