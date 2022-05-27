@@ -13,3 +13,9 @@ class DisplayProduct(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Seller(BaseModel):
+    username: str
+    email: str
+    password: str
