@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from . import schemas, models
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
+from typing import List
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -27,13 +28,13 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
     return request
 
 
-@app.get("/products")
+@app.get("/products", response_model=List[schemas.DisplayProduct])
 def get_all_product(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
 
 
-@app.get("/products/{id}")
+@app.get("/products/{id}", response_model=schemas.DisplayProduct)
 def get_product_by_id(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     return product
