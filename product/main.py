@@ -31,3 +31,9 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
 def get_all_product(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
+
+
+@app.get('/products/{id}')
+def get_all_product(id, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == id).first()
+    return product
