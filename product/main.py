@@ -52,7 +52,7 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
     return f"product entry remove from db as requested!"
 
 
-@app.put("/product/{id}",status_code=status.HTTP_202_ACCEPTED)
+@app.put("/product/{id}",status_code=status.HTTP_200_OK)
 def update_product_by_id(
     id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):
