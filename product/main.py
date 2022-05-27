@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, status
+from fastapi import FastAPI, Depends, status, HTTPException
 from . import schemas, models
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
@@ -39,6 +39,8 @@ def get_all_product(db: Session = Depends(get_db)):
          status_code=status.HTTP_200_OK)
 def get_product_by_id(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
+    if not product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Product not found!")
     return product
 
 
@@ -58,7 +60,7 @@ def update_product_by_id(
 ):
     product = db.query(models.Product).filter(models.Product.id == id)
     if not product.first():
-        return f"Product with id: {id} not exist in db"
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Product not found!")
     else:
         product.update(request.dict())
         db.commit()
