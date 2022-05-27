@@ -45,3 +45,14 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
         synchronize_session=False)
     db.commit()
     return f'product entry remove from db as requested!'
+
+
+@app.put('/product/{id}')
+def update_product_by_id(id:int, request: schemas.Product, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == id)
+    if not product.first():
+        return f'Product with id: {id} not exist in db'
+    else:
+        product.update(request.dict())
+        db.commit()
+        return f'Product successfully updated!'
