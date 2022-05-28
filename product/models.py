@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from .database import Base
 
 
@@ -8,6 +8,7 @@ class Product(Base):
     name = Column(String)
     description = Column(String)
     price = Column(Integer)
+    seller_id = Column(Integer, ForeignKey('Seller.id'))
 
 
 class Seller(Base):
