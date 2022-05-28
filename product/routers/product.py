@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from .. import schemas, models
 from ..database import engine, SessionLocal, get_db
 from typing import List
+from .login import get_current_user
 
 router = APIRouter(
     tags=["Products"],
@@ -32,7 +33,7 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
     response_model=List[schemas.DisplayProduct],
     status_code=status.HTTP_200_OK,
 )
-def get_all_product(db: Session = Depends(get_db)):
+def get_all_product(db: Session = Depends(get_db),current_user:schemas.Seller=Depends(get_current_user)):
     products = db.query(models.Product).all()
     return products
 
