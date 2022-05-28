@@ -21,4 +21,4 @@ class Seller(Base):
     email = Column(String)
     password = Column(String)
 
-    product = relationship('Product', back_populates='sellers')
+    products = relationship('Product', back_populates='seller')

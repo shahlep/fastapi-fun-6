@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 
-@app.post("/product", status_code=status.HTTP_201_CREATED)
+@app.post("/product", status_code=status.HTTP_201_CREATED,response_model=schemas.DisplayProduct)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description,
