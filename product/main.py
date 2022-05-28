@@ -1,7 +1,6 @@
-from fastapi import FastAPI, Depends, status, HTTPException
-from . import schemas, models
-from .database import engine, SessionLocal
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
+from . import models
+from .database import engine
 from .routers import product,seller
 
 
