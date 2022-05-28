@@ -4,12 +4,14 @@ from ..database import get_db
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
-router = APIRouter()
+router = APIRouter(
+                tags=['Seller'],
+)
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
-@router.post("/seller", tags=['Seller'], response_model=schemas.DisplaySeller)
+@router.post("/seller", response_model=schemas.DisplaySeller)
 def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
     hashed_password = pwd_context.hash(request.password)
     new_seller = models.Seller(
