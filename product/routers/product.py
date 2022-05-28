@@ -1,18 +1,10 @@
 from fastapi import APIRouter, status, Depends,HTTPException
 from sqlalchemy.orm import Session
 from .. import schemas, models
-from ..database import engine, SessionLocal
+from ..database import engine, SessionLocal,get_db
 from typing import List
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/product", tags=['Products'], status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct)
