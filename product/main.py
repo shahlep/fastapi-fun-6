@@ -5,7 +5,10 @@ from sqlalchemy.orm import Session
 from typing import List
 from passlib.context import CryptContext
 
-app = FastAPI()
+app = FastAPI(
+    title='Products API',
+    description='All products related info'
+)
 models.Base.metadata.create_all(bind=engine)
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
