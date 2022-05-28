@@ -6,10 +6,11 @@ from typing import List
 
 router = APIRouter(
             tags=['Products'],
+            prefix='/product',
 )
 
 
-@router.post("/product", status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description,
@@ -23,7 +24,7 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/products",
+    "/",
     response_model=List[schemas.DisplayProduct],
     status_code=status.HTTP_200_OK,
 )
@@ -33,7 +34,7 @@ def get_all_product(db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/products/{id}",
+    "/{id}",
     response_model=schemas.DisplayProduct,
     status_code=status.HTTP_200_OK,
 )
@@ -46,7 +47,7 @@ def get_product_by_id(id, db: Session = Depends(get_db)):
     return product
 
 
-@router.delete("/products/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def get_product_to_delete(id, db: Session = Depends(get_db)):
     db.query(models.Product).filter(models.Product.id == id).delete(
         synchronize_session=False
@@ -55,7 +56,7 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
     return f"product entry remove from db as requested!"
 
 
-@router.put("/product/{id}",  status_code=status.HTTP_200_OK)
+@router.put("/{id}",  status_code=status.HTTP_200_OK)
 def update_product_by_id(
         id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):

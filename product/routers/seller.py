@@ -6,12 +6,13 @@ from passlib.context import CryptContext
 
 router = APIRouter(
                 tags=['Seller'],
+                prefix='/seller',
 )
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
-@router.post("/seller", response_model=schemas.DisplaySeller)
+@router.post("/", response_model=schemas.DisplaySeller)
 def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
     hashed_password = pwd_context.hash(request.password)
     new_seller = models.Seller(
