@@ -19,10 +19,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 20
 
 def generate_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow()+timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({'exp':expire})
-    encoded_jwt = jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({'exp': expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 @router.post("/login")
 def login(request: schemas.Login, db: Session = Depends(get_db)):
@@ -39,4 +40,7 @@ def login(request: schemas.Login, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Invalid password!"
         )
-    return request
+    access_token = generate_token(
+        data={'user': seller.username}
+    )
+    return {'access_token':access_token,'token_type':'bearer'}
