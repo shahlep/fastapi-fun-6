@@ -9,7 +9,8 @@ router = APIRouter(
 )
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+#Generate with running openssl rand -hex 32 in terminal
+SECRET_KEY = "fcc1d1ad94cf1318bef217dd3469b869c3553a310d0ba8eb65a53201d92a9871"
 
 @router.post("/login")
 def login(request: schemas.Login, db: Session = Depends(get_db)):
