@@ -7,7 +7,11 @@ from passlib.context import CryptContext
 
 app = FastAPI(
     title='Products API',
-    description='All products related info'
+    description='All products related info',
+    contact={
+        "Developer name":"Shah Rahman",
+    },
+    docs_url='/documentation'
 )
 models.Base.metadata.create_all(bind=engine)
 
@@ -22,7 +26,7 @@ def get_db():
         db.close()
 
 
-@app.post("/product", status_code=status.HTTP_201_CREATED,response_model=schemas.DisplayProduct)
+@app.post("/product",tags=['Products'], status_code=status.HTTP_201_CREATED,response_model=schemas.DisplayProduct)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description,
@@ -38,6 +42,7 @@ def add(request: schemas.Product, db: Session = Depends(get_db)):
 @app.get(
     "/products",
     response_model=List[schemas.DisplayProduct],
+    tags=['Products'],
     status_code=status.HTTP_200_OK,
 )
 def get_all_product(db: Session = Depends(get_db)):
@@ -47,6 +52,7 @@ def get_all_product(db: Session = Depends(get_db)):
 
 @app.get(
     "/products/{id}",
+    tags=['Products'],
     response_model=schemas.DisplayProduct,
     status_code=status.HTTP_200_OK,
 )
@@ -59,7 +65,7 @@ def get_product_by_id(id, db: Session = Depends(get_db)):
     return product
 
 
-@app.delete("/products/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/products/{id}", tags=['Products'],status_code=status.HTTP_204_NO_CONTENT)
 def get_product_to_delete(id, db: Session = Depends(get_db)):
     db.query(models.Product).filter(models.Product.id == id).delete(
         synchronize_session=False
@@ -68,7 +74,7 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
     return f"product entry remove from db as requested!"
 
 
-@app.put("/product/{id}", status_code=status.HTTP_200_OK)
+@app.put("/product/{id}",tags=['Products'], status_code=status.HTTP_200_OK)
 def update_product_by_id(
         id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):
@@ -83,7 +89,7 @@ def update_product_by_id(
         return f"Product successfully updated!"
 
 
-@app.post("/seller",response_model=schemas.DisplaySeller)
+@app.post("/seller",tags=['Seller'],response_model=schemas.DisplaySeller)
 def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
     hashed_password=pwd_context.hash(request.password)
     new_seller = models.Seller(
