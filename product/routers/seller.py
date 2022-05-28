@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 router = APIRouter(
-                tags=['Seller'],
-                prefix='/seller',
+    tags=["Seller"],
+    prefix="/seller",
 )
 
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.post("/", response_model=schemas.DisplaySeller)

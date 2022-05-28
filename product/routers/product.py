@@ -1,20 +1,24 @@
-from fastapi import APIRouter, status, Depends,HTTPException
+from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import schemas, models
-from ..database import engine, SessionLocal,get_db
+from ..database import engine, SessionLocal, get_db
 from typing import List
 
 router = APIRouter(
-            tags=['Products'],
-            prefix='/product',
+    tags=["Products"],
+    prefix="/product",
 )
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct)
+@router.post(
+    "/", status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct
+)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
-        name=request.name, description=request.description,
-        price=request.price, seller_id=1
+        name=request.name,
+        description=request.description,
+        price=request.price,
+        seller_id=1,
     )
     db.add(new_product)
     db.commit()
@@ -56,9 +60,9 @@ def get_product_to_delete(id, db: Session = Depends(get_db)):
     return f"product entry remove from db as requested!"
 
 
-@router.put("/{id}",  status_code=status.HTTP_200_OK)
+@router.put("/{id}", status_code=status.HTTP_200_OK)
 def update_product_by_id(
-        id: int, request: schemas.Product, db: Session = Depends(get_db)
+    id: int, request: schemas.Product, db: Session = Depends(get_db)
 ):
     product = db.query(models.Product).filter(models.Product.id == id)
     if not product.first():

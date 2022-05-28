@@ -9,9 +9,9 @@ class Product(Base):
     name = Column(String)
     description = Column(String)
     price = Column(Integer)
-    seller_id = Column(Integer, ForeignKey('sellers.id'))
+    seller_id = Column(Integer, ForeignKey("sellers.id"))
 
-    seller = relationship('Seller', back_populates='products')
+    seller = relationship("Seller", back_populates="products")
 
 
 class Seller(Base):
@@ -21,4 +21,4 @@ class Seller(Base):
     email = Column(String)
     password = Column(String)
 
-    products = relationship('Product', back_populates='seller')
+    products = relationship("Product", back_populates="seller")
