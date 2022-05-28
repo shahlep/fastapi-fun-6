@@ -3,3 +3,5 @@ uvicorn
 pydantic
 sqlalchemy
 black
+bcrypt
+passlib

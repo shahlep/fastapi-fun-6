@@ -3,9 +3,12 @@ from . import schemas, models
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from typing import List
+from passlib.context import CryptContext
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
+
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
 def get_db():
@@ -76,10 +79,12 @@ def update_product_by_id(
         return f"Product successfully updated!"
 
 
-@app.post('/seller')
+@app.post("/seller",response_model=schemas.DisplaySeller)
 def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
-    new_seller = models.Seller(username=request.username,
-                               email=request.email, password=request.password)
+    hashed_password=pwd_context.hash(request.password)
+    new_seller = models.Seller(
+        username=request.username, email=request.email, password=hashed_password
+    )
     db.add(new_seller)
     db.commit()
     db.refresh(new_seller)
