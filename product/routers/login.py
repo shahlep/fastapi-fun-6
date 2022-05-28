@@ -18,4 +18,7 @@ def login(request: schemas.Login, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail='Username not found!')
+    if not pwd_context.verify(request.password, user.password):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Invalid password!')
     return request
