@@ -22,7 +22,8 @@ def get_db():
 @app.post("/product", status_code=status.HTTP_201_CREATED)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
-        name=request.name, description=request.description, price=request.price
+        name=request.name, description=request.description,
+        price=request.price, seller_id=1
     )
     db.add(new_product)
     db.commit()
